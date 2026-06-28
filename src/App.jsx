@@ -94,7 +94,23 @@ function App() {
   const [theme, setTheme] = useState("trophies");
   const [level, setLevel] = useState("hard");
   const [sound, setSound] = useState(true);
+function playSound(fileName) {
+  if (!sound) return;
 
+  const audio = new Audio(`/sounds/${fileName}`);
+
+  if (fileName === "flip.mp3") {
+    audio.volume = 0.2;
+  } else if (fileName === "success.mp3") {
+    audio.volume = 0.45;
+  } else {
+    audio.volume = 0.5;
+  }
+
+  audio.play().catch((error) => {
+    console.log("Erreur audio :", error);
+  });
+}
   const [cards, setCards] = useState([]);
   const [firstCard, setFirstCard] = useState(null);
   const [secondCard, setSecondCard] = useState(null);
@@ -154,6 +170,7 @@ function App() {
     ) {
       return;
     }
+  playSound("flip.mp3");
 
     if (!firstCard) {
       setFirstCard(card);
@@ -174,6 +191,7 @@ function App() {
       );
 
       setMatchedPairs((previousPairs) => previousPairs + 1);
+  playSound("success.mp3");
       setMessage("✅ Paire trouvée !");
 
       setTimeout(() => {
@@ -181,7 +199,7 @@ function App() {
       }, 600);
     } else {
       setMessage("❌ Ce n’est pas une paire.");
-
+playSound("fahh.mp3");
       setTimeout(() => {
         resetSelectedCards();
       }, 1000);
